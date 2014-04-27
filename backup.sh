@@ -17,17 +17,24 @@
 #          * Use OS X Disk Arbitration to monitor status of flash drive
 #          
 #          @author Richard White
-#          @version 2014-04-27
+#          @version 2014-04-27-1500
 
 
-drivename=MRBCKP
+drivename=MACBOOKBACKUP
 directory=/Users/userName/Desktop/folder_to_backup
 while x=0
     do if mount | grep -q $drivename;
     then 
-        echo "Backing up to USB"
-        sleep 10
-        rsync -a $directory /Volumes/$drivename 
+        memneeded=$(du -s $directory | cut -f 1)
+        memavailable=$(du -s /Volumes/$drivename | cut -f 1)
+        if [ "$memneeded" -gt "$memavailable" ]
+        then
+            echo "Insufficient memory on flashdrive"
+        else
+            echo "Backing up to USB"
+            sleep 10 
+            rsync -ax $directory /Volumes/$drivename
+        fi 
         diskutil unmount /Volumes/$drivename
         echo "Drive is safe to remove"
     fi
