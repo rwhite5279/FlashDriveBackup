@@ -20,7 +20,7 @@
 #          @version 2014-04-27-1500
 
 
-drivename=MACBOOKBACKUP
+drivename=MBPBCKUP
 directory=/Users/userName/Desktop/folder_to_backup
 while x=0
     do if mount | grep -q $drivename;
